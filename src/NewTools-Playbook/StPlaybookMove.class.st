@@ -2,55 +2,76 @@ Class {
 	#name : #StPlaybookMove,
 	#superclass : #Object,
 	#instVars : [
-		'name',
-		'contents'
+		'reference'
 	],
 	#category : #'NewTools-Playbook'
 }
 
 { #category : #'instance creation' }
-StPlaybookMove class >> newName: aName [
+StPlaybookMove class >> fromReference: aReference [
 
-	^ self new
-		name: aName;
-		yourself
+	^ self new fromReference: aReference.
+
 ]
 
 { #category : #'instance creation' }
-StPlaybookMove class >> newReference: aReference [
+StPlaybookMove class >> newDirectory: aDirectory name: aName [
 
-	aReference exists ifFalse: [ 
-		^ self newName: aReference basenameWithoutExtension ].
-
-	^ aReference readStreamDo: [ :stream | 
-		self newStream: stream ]
+	^ self fromReference: aDirectory / aName
 ]
 
 { #category : #'instance creation' }
-StPlaybookMove class >> newStream: stream [
+StPlaybookMove class >> newDirectory: aDirectory number: aNumber [
 
-	^ STON fromStream: stream
+	^ self 
+		newDirectory: aDirectory 
+		name: ('{1}.st' format: { aNumber }) 
 ]
 
 { #category : #accessing }
 StPlaybookMove >> contents [
 
-	^ contents ifNil: [ contents := '' ]
+	self reference exists ifFalse: [ ^ '' ].
+	^ self reference contents
 ]
 
 { #category : #accessing }
 StPlaybookMove >> contents: aString [
 
-	contents := aString
+	self reference 
+		ensureDelete;
+		writeStreamDo: [ :stream | 
+			stream nextPutAll: aString ]
+]
+
+{ #category : #initialize }
+StPlaybookMove >> fromReference: aReference [
+
+	reference := aReference
 ]
 
 { #category : #accessing }
 StPlaybookMove >> name [
-	^ name
+
+	^ self reference basename
 ]
 
 { #category : #accessing }
-StPlaybookMove >> name: aString [
+StPlaybookMove >> nextMove [
 
-	name := aString
+	^ self class 
+		newDirectory: self reference parent 
+		number: self number + 1
+]
+
+{ #category : #accessing }
+StPlaybookMove >> number [
+
+	^ self reference basenameWithoutExtension asNumber
+]
+
+{ #category : #accessing }
+StPlaybookMove >> reference [
+
+	^ reference
 ]

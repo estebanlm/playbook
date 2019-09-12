@@ -42,7 +42,9 @@ StPlaybook >> directory [
 { #category : #accessing }
 StPlaybook >> firstMove [
 
-	^ StPlaybookMove newReference: self directory / 'move-1.st'
+	^ StPlaybookMove 
+		newDirectory: self directory 
+		number: 1
 ]
 
 { #category : #initialization }
