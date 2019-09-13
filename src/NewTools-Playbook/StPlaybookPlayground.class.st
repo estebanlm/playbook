@@ -30,10 +30,11 @@ StPlaybookPlayground >> initializePresenters [
 StPlaybookPlayground >> initializeToolbar [
 
 	toolbar := self newToolBar.
-	"toolbar beIcons.
+	toolbar beIcons.
+	
 	SpToolBarPresenterBuilder new 
 		toolbarPresenter: toolbar;
-		visit: self toolbarActions.	"
+		visit: self toolbarActions
 ]
 
 { #category : #'accessing model' }

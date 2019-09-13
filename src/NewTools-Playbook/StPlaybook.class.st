@@ -33,7 +33,7 @@ StPlaybook >> initializePresenters [
 	pageList := self instantiate: SpPlaybookMillerListPresenter.
 	pageList shownPages: 2.
 	pageList presenterBlock: [ :aMove |
-		StPlaybookMovePresenter on: aMove nextMove ].
+		StPlaybookPlayground on: aMove nextMove ].
 	pageList setRootModel: playbook firstMove.
 	
 	paginator := self instantiate: SpPlaybookMillerPaginatorPresenter.
