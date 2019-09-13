@@ -8,6 +8,14 @@ Class {
 	#category : #'NewTools-Playbook'
 }
 
+{ #category : #specs }
+StPlaybook class >> defaultSpec [
+
+	^ SpScrollableLayout new
+		add: #pageList;
+		yourself
+]
+
 { #category : #accessing }
 StPlaybook >> firstMove [
 
@@ -26,7 +34,7 @@ StPlaybook >> initialize [
 { #category : #initialization }
 StPlaybook >> initializeWidgets [
 
-	pageList := self instantiate: SpMillerColumnPresenter.
+	pageList := self instantiate: SpPlaybookMillerPresenter.
 	pageList presenterBlock: [ :aMove |
 		StPlaybookMovePresenter on: aMove nextMove ].
 	pageList setRootModel: playbook firstMove

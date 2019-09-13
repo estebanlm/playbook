@@ -14,7 +14,7 @@ SpPlaybookMillerPresenter class >> defaultPageSize [
 ]
 
 { #category : #initialization }
-SpPlaybookMillerPresenter >> addPage: aPagePresenter [
+SpPlaybookMillerPresenter >> addPresenter: aPagePresenter [
 
 	aPagePresenter owner: self.
 	layout 
