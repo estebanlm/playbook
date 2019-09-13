@@ -10,7 +10,7 @@ Class {
 { #category : #accessing }
 SpPlaybookMillerPresenter class >> defaultPageSize [
 
-	^ 250
+	^ 300
 ]
 
 { #category : #initialization }
