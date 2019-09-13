@@ -13,10 +13,10 @@ Class {
 StPlaybook class >> defaultSpec [
 
 	^ SpBoxLayout newHorizontal
+		add: #paginator expand: false fill: false padding: 0;
 		add: (SpScrollableLayout new
 			add: #pageList;
 			yourself);
-		addLast: #paginator expand: false fill: false padding: 0;
 		yourself 
 ]
 

@@ -13,9 +13,7 @@ Class {
 SpPlaybookMillerPaginatorPresenter class >> defaultSpec [
 
 	^ SpBoxLayout newVertical
-		borderWidth: 5;
-		spacing: 5;
-		add: #shownPages expand: false fill: false padding: 0;
+		"add: #shownPages expand: false fill: false padding: 0;"
 		add: #thumbnailList;
 		yourself
 ]
@@ -23,10 +21,11 @@ SpPlaybookMillerPaginatorPresenter class >> defaultSpec [
 { #category : #initialization }
 SpPlaybookMillerPaginatorPresenter >> initializeWidgets [
 	
-	shownPages := self newDropList 
+	"shownPages := self newDropList 
 		items: (1 to: 10) asArray;
 		display: [ :each | each asString ];
-		yourself.
+		whenSelectionChangedDo: [ millerList shownPages: shownPages selectedItem ];
+		yourself."
 		
 	thumbnailList := self newList
 		display: [ :each | each asString ];
@@ -47,7 +46,7 @@ SpPlaybookMillerPaginatorPresenter >> millerList: aMillerListPresenter [
 { #category : #accessing }
 SpPlaybookMillerPaginatorPresenter >> reset [
 
-	shownPages selectItem: millerList shownPages.
+	"shownPages selectItem: millerList shownPages."
 	thumbnailList items: (millerList pages withIndexCollect: [ :each :index | index ]).
 	
 ]

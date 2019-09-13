@@ -27,16 +27,14 @@ SpPlaybookMillerListPresenter >> addPresenter: aPagePresenter [
 	| newPageSize |
 
 	newPageSize := self recalculateSizeForPages: pages size + 1.
-	newPageSize = self pageSize 
-		ifFalse: [ self updatePageSizesTo: newPageSize ].
-
+	self updateForPages: pages size + 1.
 	self basicAddPresenter: aPagePresenter size: newPageSize.
 	pages add: aPagePresenter.
 
 	aPagePresenter takeKeyboardFocus
 ]
 
-{ #category : #initialization }
+{ #category : #private }
 SpPlaybookMillerListPresenter >> basicAddPresenter: aPagePresenter size: aNumber [
 	
 	aPagePresenter owner: self.
@@ -56,7 +54,7 @@ SpPlaybookMillerListPresenter >> initialize [
 ]
 
 { #category : #initialization }
-SpPlaybookMillerListPresenter >> initializeWidgets [
+SpPlaybookMillerListPresenter >> initializePresenters [
 	
 	layout := SpBoxLayout newVertical
 ]
@@ -85,7 +83,8 @@ SpPlaybookMillerListPresenter >> pageSize [
 { #category : #accessing }
 SpPlaybookMillerListPresenter >> pageSize: aNumber [
 
-	pageSize := aNumber
+	pageSize := aNumber.
+	self reset
 ]
 
 { #category : #accessing }
@@ -104,7 +103,7 @@ SpPlaybookMillerListPresenter >> paginator: aPaginator [
 	aPaginator millerList: self
 ]
 
-{ #category : #initialization }
+{ #category : #private }
 SpPlaybookMillerListPresenter >> recalculateSizeForPages: aNumber [
 	
 	^ aNumber > 1
@@ -112,7 +111,13 @@ SpPlaybookMillerListPresenter >> recalculateSizeForPages: aNumber [
 		ifFalse:[ self pageSize ]
 ]
 
-{ #category : #initialization }
+{ #category : #private }
+SpPlaybookMillerListPresenter >> reset [
+
+	self updateForPages: pages size
+]
+
+{ #category : #private }
 SpPlaybookMillerListPresenter >> resetTo: aNumber [
 
 	super resetTo: aNumber.
@@ -128,10 +133,20 @@ SpPlaybookMillerListPresenter >> shownPages [
 { #category : #accessing }
 SpPlaybookMillerListPresenter >> shownPages: aNumber [
 	
-	shownPages := aNumber
+	shownPages := aNumber.
+	self reset
 ]
 
-{ #category : #initialization }
+{ #category : #private }
+SpPlaybookMillerListPresenter >> updateForPages: aNumber [
+	| newPageSize |
+
+	newPageSize := self recalculateSizeForPages: aNumber.
+	newPageSize = self pageSize 
+		ifFalse: [ self updatePageSizesTo: newPageSize ]
+]
+
+{ #category : #private }
 SpPlaybookMillerListPresenter >> updatePageSizesTo: aNumber [
 
 	layout removeAll.
