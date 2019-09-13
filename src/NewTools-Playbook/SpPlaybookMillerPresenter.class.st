@@ -38,7 +38,12 @@ SpPlaybookMillerPresenter >> newPresenterFor: aModel [
 	contentPresenter := super newPresenterFor: aModel.
 	pagePresenter := SpPlaybookMillerPagePresenter 
 		newModel: aModel
-		presenter: contentPresenter
+		presenter: contentPresenter.
+		
+	pagePresenter onExpand: [ 
+		self changeSelection: aModel from: pagePresenter ].
+		
+	^ pagePresenter
 ]
 
 { #category : #accessing }
