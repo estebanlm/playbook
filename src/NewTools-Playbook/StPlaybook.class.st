@@ -30,7 +30,7 @@ StPlaybook >> initialize [
 { #category : #initialization }
 StPlaybook >> initializeWidgets [
 
-	pageList := self instantiate: SpPlaybookMillerPresenter.
+	pageList := self instantiate: SpPlaybookMillerListPresenter.
 	pageList presenterBlock: [ :aMove |
 		StPlaybookMovePresenter on: aMove nextMove ].
 	pageList setRootModel: playbook firstMove.

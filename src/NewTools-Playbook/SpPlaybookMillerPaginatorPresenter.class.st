@@ -28,18 +28,26 @@ SpPlaybookMillerPaginatorPresenter >> initializeWidgets [
 		display: [ :each | each asString ];
 		yourself.
 		
-	thumbnailList := self newList.
+	thumbnailList := self newList
+		display: [ :each | each asString ];
+		yourself.
 ]
 
 { #category : #accessing }
 SpPlaybookMillerPaginatorPresenter >> millerList: aMillerListPresenter [
 
+	"To avoid cycles"
+	millerList = aMillerListPresenter ifTrue: [ ^ self ].
+	
 	millerList := aMillerListPresenter.
+	millerList paginator: self.
 	self reset
 ]
 
 { #category : #accessing }
 SpPlaybookMillerPaginatorPresenter >> reset [
 
-	shownPages selectItem: millerList shownPages
+	shownPages selectItem: millerList shownPages.
+	thumbnailList items: (millerList pages withIndexCollect: [ :each :index | index ]).
+	
 ]
