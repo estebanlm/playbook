@@ -22,7 +22,9 @@ SpPlaybookMillerPresenter >> addPresenter: aPagePresenter [
 		withConstraints: [ :c |
 			c 
 				expand: false;
-				height: self pageSize ]
+				height: self pageSize ].
+		
+	aPagePresenter takeKeyboardFocus
 ]
 
 { #category : #initialization }

@@ -28,7 +28,7 @@ SpPlaybookMillerPagePresenter class >> newModel: aModel presenter: aPresenter [
 		initialize
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #actions }
 SpPlaybookMillerPagePresenter >> doExpand [ 
 
 	expandAction ifNil: [ ^ self ].
@@ -49,7 +49,7 @@ SpPlaybookMillerPagePresenter >> model [
 	^ model
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #events }
 SpPlaybookMillerPagePresenter >> onExpand: aBlock [
 
 	expandAction := aBlock
