@@ -12,10 +12,12 @@ Class {
 { #category : #specs }
 SpPlaybookMillerPaginatorPresenter class >> defaultSpec [
 
-	^ (SpBoxLayout newVertical
-			add: #shownPages expand: false fill: false padding: 0;
-			add: #thumbnailList;
-			yourself)
+	^ SpBoxLayout newVertical
+		borderWidth: 5;
+		spacing: 5;
+		add: #shownPages expand: false fill: false padding: 0;
+		add: #thumbnailList;
+		yourself
 ]
 
 { #category : #initialization }
@@ -32,5 +34,12 @@ SpPlaybookMillerPaginatorPresenter >> initializeWidgets [
 { #category : #accessing }
 SpPlaybookMillerPaginatorPresenter >> millerList: aMillerListPresenter [
 
-	millerList := aMillerListPresenter
+	millerList := aMillerListPresenter.
+	self reset
+]
+
+{ #category : #accessing }
+SpPlaybookMillerPaginatorPresenter >> reset [
+
+	shownPages selectItem: millerList shownPages
 ]

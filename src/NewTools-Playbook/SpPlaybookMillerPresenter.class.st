@@ -2,15 +2,22 @@ Class {
 	#name : #SpPlaybookMillerPresenter,
 	#superclass : #SpMillerColumnPresenter,
 	#instVars : [
-		'pageSize'
+		'pageSize',
+		'shownPages'
 	],
 	#category : #'NewTools-Playbook'
 }
 
-{ #category : #accessing }
+{ #category : #defaults }
 SpPlaybookMillerPresenter class >> defaultPageSize [
 
 	^ 300
+]
+
+{ #category : #defaults }
+SpPlaybookMillerPresenter class >> defaultShowPages [
+
+	^ 2
 ]
 
 { #category : #initialization }
@@ -58,4 +65,10 @@ SpPlaybookMillerPresenter >> pageSize [
 SpPlaybookMillerPresenter >> pageSize: aNumber [
 
 	pageSize := aNumber
+]
+
+{ #category : #accessing }
+SpPlaybookMillerPresenter >> shownPages [
+	
+	^ shownPages ifNil: [ shownPages := self class defaultShowPages ]
 ]
