@@ -19,7 +19,7 @@ SpPlaybookMillerPaginatorPresenter class >> defaultSpec [
 ]
 
 { #category : #initialization }
-SpPlaybookMillerPaginatorPresenter >> initializeWidgets [
+SpPlaybookMillerPaginatorPresenter >> initializePresenters [
 	
 	"shownPages := self newDropList 
 		items: (1 to: 10) asArray;

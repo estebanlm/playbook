@@ -19,9 +19,9 @@ StPlaybookMovePresenter >> expandNext [
 ]
 
 { #category : #initialization }
-StPlaybookMovePresenter >> initializeWidgets [
+StPlaybookMovePresenter >> initializePresenters [
 
-	super initializeWidgets.
+	super initializePresenters.
 	text text: move contents.
 	"expandButton := self newButton 
 		icon: (self application iconNamed: #glamorousDown);

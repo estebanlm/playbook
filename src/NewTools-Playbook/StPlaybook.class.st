@@ -28,7 +28,7 @@ StPlaybook >> initialize [
 ]
 
 { #category : #initialization }
-StPlaybook >> initializeWidgets [
+StPlaybook >> initializePresenters [
 
 	pageList := self instantiate: SpPlaybookMillerListPresenter.
 	pageList shownPages: 2.

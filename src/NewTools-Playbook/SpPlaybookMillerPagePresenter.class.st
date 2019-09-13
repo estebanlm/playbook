@@ -36,7 +36,7 @@ SpPlaybookMillerPagePresenter >> doExpand [
 ]
 
 { #category : #initialization }
-SpPlaybookMillerPagePresenter >> initializeWidgets [
+SpPlaybookMillerPagePresenter >> initializePresenters [
 
 	expandButton := self newButton
 		icon: (self application iconNamed: #glamorousDown);

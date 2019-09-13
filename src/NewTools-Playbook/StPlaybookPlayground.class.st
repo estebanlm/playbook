@@ -18,6 +18,15 @@ StPlaybookPlayground class >> defaultSpec [
 ]
 
 { #category : #initialization }
+StPlaybookPlayground >> initializePresenters [
+
+	super initializePresenters.
+	self initializeToolbar.
+	
+	text text: move contents
+]
+
+{ #category : #initialization }
 StPlaybookPlayground >> initializeToolbar [
 
 	toolbar := self newToolBar.
@@ -25,15 +34,6 @@ StPlaybookPlayground >> initializeToolbar [
 	SpToolBarPresenterBuilder new 
 		toolbarPresenter: toolbar;
 		visit: self toolbarActions.	"
-]
-
-{ #category : #initialization }
-StPlaybookPlayground >> initializeWidgets [
-
-	super initializeWidgets.
-	self initializeToolbar.
-	
-	text text: move contents
 ]
 
 { #category : #'accessing model' }
