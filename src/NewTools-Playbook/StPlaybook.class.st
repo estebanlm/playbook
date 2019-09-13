@@ -4,8 +4,7 @@ Class {
 	#instVars : [
 		'pageList',
 		'playbook',
-		'showPages',
-		'pageThumbs'
+		'paginator'
 	],
 	#category : #'NewTools-Playbook'
 }
@@ -17,13 +16,7 @@ StPlaybook class >> defaultSpec [
 		add: (SpScrollableLayout new
 			add: #pageList;
 			yourself);
-		addLast: (SpBoxLayout newVertical
-				add: #showPages expand: false fill: false padding: 0;
-				add: #pageThumbs;
-				yourself) 
-			expand: false 
-			fill: false 
-			padding: 0;
+		addLast: #paginator expand: false fill: false padding: 0;
 		yourself 
 ]
 
@@ -42,12 +35,8 @@ StPlaybook >> initializeWidgets [
 		StPlaybookMovePresenter on: aMove nextMove ].
 	pageList setRootModel: playbook firstMove.
 	
-	showPages := self newDropList 
-		items: (1 to: 10) asArray;
-		display: [ :each | each asString ];
-		yourself.
-		
-	pageThumbs := self newLabel label: '?'
+	paginator := self instantiate: SpPlaybookMillerPaginatorPresenter.
+	paginator millerList: pageList
 ]
 
 { #category : #initialization }
