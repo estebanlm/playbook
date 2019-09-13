@@ -12,7 +12,7 @@ Class {
 { #category : #specs }
 StPlaybook class >> defaultSpec [
 
-	^ SpBoxLayout newHorizontal 
+	^ SpBoxLayout newHorizontal
 		add: (SpScrollableLayout new
 			add: #pageList;
 			yourself);
@@ -31,6 +31,7 @@ StPlaybook >> initialize [
 StPlaybook >> initializeWidgets [
 
 	pageList := self instantiate: SpPlaybookMillerListPresenter.
+	pageList shownPages: 2.
 	pageList presenterBlock: [ :aMove |
 		StPlaybookMovePresenter on: aMove nextMove ].
 	pageList setRootModel: playbook firstMove.

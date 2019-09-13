@@ -24,15 +24,28 @@ SpPlaybookMillerListPresenter class >> defaultShowPages [
 
 { #category : #initialization }
 SpPlaybookMillerListPresenter >> addPresenter: aPagePresenter [
+	| newPageSize |
 
+	newPageSize := self recalculateSizeForPages: pages size + 1.
+	newPageSize = self pageSize 
+		ifFalse: [ self updatePageSizesTo: newPageSize ].
+
+	self basicAddPresenter: aPagePresenter size: newPageSize.
+	pages add: aPagePresenter.
+
+	aPagePresenter takeKeyboardFocus
+]
+
+{ #category : #initialization }
+SpPlaybookMillerListPresenter >> basicAddPresenter: aPagePresenter size: aNumber [
+	
 	aPagePresenter owner: self.
 	layout 
 		add: aPagePresenter
-		withConstraints: [ :c | c expand: false ].
-	pages add: aPagePresenter.
-	self updatePageSizes.
-
-	aPagePresenter takeKeyboardFocus
+		withConstraints: [ :constraint | 
+			constraint 
+				expand: false; 
+				height: aNumber ]
 ]
 
 { #category : #initialization }
@@ -92,6 +105,14 @@ SpPlaybookMillerListPresenter >> paginator: aPaginator [
 ]
 
 { #category : #initialization }
+SpPlaybookMillerListPresenter >> recalculateSizeForPages: aNumber [
+	
+	^ aNumber > 1
+		ifTrue: [ (self pageSize / (aNumber min: self shownPages)) asInteger ]
+		ifFalse:[ self pageSize ]
+]
+
+{ #category : #initialization }
 SpPlaybookMillerListPresenter >> resetTo: aNumber [
 
 	super resetTo: aNumber.
@@ -104,16 +125,16 @@ SpPlaybookMillerListPresenter >> shownPages [
 	^ shownPages ifNil: [ shownPages := self class defaultShowPages ]
 ]
 
-{ #category : #initialization }
-SpPlaybookMillerListPresenter >> updatePageSizes [
-	| height |
-
-	height := pages size > 1 
-		ifTrue: [ (self pageSize / self shownPages) asInteger ]
-		ifFalse:[ self pageSize ].
-
-	layout children keysAndValuesDo: [ :p :c | 
-		c height: height ].	
-		
+{ #category : #accessing }
+SpPlaybookMillerListPresenter >> shownPages: aNumber [
 	
+	shownPages := aNumber
+]
+
+{ #category : #initialization }
+SpPlaybookMillerListPresenter >> updatePageSizesTo: aNumber [
+
+	layout removeAll.
+	pages do: [ :each | 
+		self basicAddPresenter: each size: aNumber ]
 ]
