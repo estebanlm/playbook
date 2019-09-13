@@ -18,7 +18,7 @@ StPlaybook class >> defaultSpec [
 			add: #pageList;
 			yourself);
 		addLast: (SpBoxLayout newVertical
-				add: #showPages expand: false;
+				add: #showPages expand: false fill: false padding: 0;
 				add: #pageThumbs;
 				yourself) 
 			expand: false 
