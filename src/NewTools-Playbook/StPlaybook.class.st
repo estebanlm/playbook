@@ -1,43 +1,12 @@
 Class {
 	#name : #StPlaybook,
-	#superclass : #Object,
+	#superclass : #StPresenter,
 	#instVars : [
-		'directory'
+		'pageList',
+		'playbook'
 	],
 	#category : #'NewTools-Playbook'
 }
-
-{ #category : #private }
-StPlaybook class >> bibliotequeDirectory [
-
-	^ FileLocator localDirectory / 'books'
-]
-
-{ #category : #private }
-StPlaybook class >> defaultDirectory [
-
-	^ (self bibliotequeDirectory / 'default') ensureCreateDirectory
-]
-
-{ #category : #'instance creation' }
-StPlaybook class >> newDefault [
-
-	^ self newDirectory: self defaultDirectory
-]
-
-{ #category : #'instance creation' }
-StPlaybook class >> newDirectory: aDirectory [
-
-	^ self basicNew
-		initializeDirectory: aDirectory;
-		yourself
-]
-
-{ #category : #accessing }
-StPlaybook >> directory [
-
-	^ directory
-]
 
 { #category : #accessing }
 StPlaybook >> firstMove [
@@ -48,8 +17,25 @@ StPlaybook >> firstMove [
 ]
 
 { #category : #initialization }
-StPlaybook >> initializeDirectory: aDirectory [ 
+StPlaybook >> initialize [
+	
+	playbook := StPlaybookBook newDefault.
+	super initialize
+]
 
-	directory := aDirectory.
-	self initialize
+{ #category : #initialization }
+StPlaybook >> initializeWidgets [
+
+	pageList := self instantiate: SpMillerColumnPresenter.
+	pageList presenterBlock: [ :aMove |
+		StPlaybookMovePresenter on: aMove nextMove ].
+	pageList setRootModel: playbook firstMove
+]
+
+{ #category : #initialization }
+StPlaybook >> initializeWindow: aWindowPresenter [
+
+	aWindowPresenter 
+		title: 'Playbook';
+		initialExtent: 600@300
 ]

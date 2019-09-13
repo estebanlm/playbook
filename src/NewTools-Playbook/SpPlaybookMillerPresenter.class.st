@@ -14,11 +14,11 @@ SpPlaybookMillerPresenter class >> defaultPageSize [
 ]
 
 { #category : #initialization }
-SpPlaybookMillerPresenter >> addPresenter: newSubPresenter [
+SpPlaybookMillerPresenter >> addPage: aPagePresenter [
 
-	newSubPresenter owner: self.
+	aPagePresenter owner: self.
 	layout 
-		add: newSubPresenter
+		add: aPagePresenter
 		withConstraints: [ :c |
 			c 
 				expand: false;
@@ -29,6 +29,16 @@ SpPlaybookMillerPresenter >> addPresenter: newSubPresenter [
 SpPlaybookMillerPresenter >> initializeWidgets [
 	
 	layout := SpBoxLayout newVertical
+]
+
+{ #category : #initialization }
+SpPlaybookMillerPresenter >> newPresenterFor: aModel [
+	| pagePresenter contentPresenter |
+	
+	contentPresenter := super newPresenterFor: aModel.
+	pagePresenter := SpPlaybookMillerPagePresenter 
+		newModel: aModel
+		presenter: contentPresenter
 ]
 
 { #category : #accessing }

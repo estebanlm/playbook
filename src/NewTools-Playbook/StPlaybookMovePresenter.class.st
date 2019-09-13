@@ -9,15 +9,6 @@ Class {
 	#category : #'NewTools-Playbook'
 }
 
-{ #category : #specs }
-StPlaybookMovePresenter class >> defaultSpec [
-
-	^ SpBoxLayout newVertical
-		add: #text;
-		addLast: #expandButton expand: false fill: true padding: 0;
-		yourself
-]
-
 { #category : #'as yet unclassified' }
 StPlaybookMovePresenter >> expandNext [
 
@@ -32,10 +23,10 @@ StPlaybookMovePresenter >> initializeWidgets [
 
 	super initializeWidgets.
 	text text: move contents.
-	expandButton := self newButton 
+	"expandButton := self newButton 
 		icon: (self application iconNamed: #glamorousDown);
 		action: [ self expandNext ];
-		yourself. 
+		yourself. "
 ]
 
 { #category : #'as yet unclassified' }
