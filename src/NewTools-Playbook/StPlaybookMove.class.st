@@ -53,7 +53,7 @@ StPlaybookMove >> fromReference: aReference [
 { #category : #accessing }
 StPlaybookMove >> name [
 
-	^ self reference basename
+	^ self reference basenameWithoutExtension
 ]
 
 { #category : #accessing }

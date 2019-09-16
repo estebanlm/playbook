@@ -3,7 +3,8 @@ Class {
 	#superclass : #StPlayground,
 	#instVars : [
 		'move',
-		'toolbar'
+		'toolbar',
+		'statusbar'
 	],
 	#category : #'NewTools-Playbook'
 }
@@ -14,7 +15,14 @@ StPlaybookPlayground class >> defaultSpec [
 	^ SpBoxLayout newVertical
 		add: #toolbar expand: false fill: false padding: 0;
 		add: #text;
+		addLast: #statusbar expand: false fill: false padding: 0;
 		yourself
+]
+
+{ #category : #initialization }
+StPlaybookPlayground >> defineInputPorts [
+
+	^ { SpModelPort new }
 ]
 
 { #category : #initialization }
@@ -22,8 +30,16 @@ StPlaybookPlayground >> initializePresenters [
 
 	super initializePresenters.
 	self initializeToolbar.
+	self initializeStatusbar.
+
+	move ifNotNil: [ 	
+		text text: move contents ]
+]
+
+{ #category : #initialization }
+StPlaybookPlayground >> initializeStatusbar [
 	
-	text text: move contents
+	statusbar := self newStatusBar
 ]
 
 { #category : #initialization }
@@ -35,6 +51,21 @@ StPlaybookPlayground >> initializeToolbar [
 	SpToolBarPresenterBuilder new 
 		toolbarPresenter: toolbar;
 		visit: self toolbarActions
+]
+
+{ #category : #accessing }
+StPlaybookPlayground >> refresh [
+
+	text text: move contents.
+	statusbar popMessage.
+	statusbar pushMessage: ('Editing {1}' format: { move name })
+]
+
+{ #category : #'accessing model' }
+StPlaybookPlayground >> setModel: aMove [
+
+	move := aMove.
+	self refresh
 ]
 
 { #category : #'accessing model' }

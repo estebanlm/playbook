@@ -3,8 +3,9 @@ Class {
 	#superclass : #StPresenter,
 	#instVars : [
 		'pageList',
-		'playbook',
-		'paginator'
+		'pageContent',
+		'paginator',
+		'playbook'
 	],
 	#category : #'NewTools-Playbook'
 }
@@ -12,10 +13,24 @@ Class {
 { #category : #specs }
 StPlaybook class >> defaultSpec [
 
-	^ SpBoxLayout newHorizontal
-		add: #paginator expand: false fill: false padding: 0;
-		add: (SpScrollableLayout new
-			add: #pageList;
+	^ SpPanedLayout newHorizontal
+		position: 25 percent;
+		add: #pageList;
+		add: #pageContent;
+		yourself
+]
+
+{ #category : #specs }
+StPlaybook class >> defaultSpecOLD [
+
+	^ SpPanedLayout newHorizontal
+		position: 30 percent;
+		add: #pageList;
+		add: (SpBoxLayout newHorizontal
+			add: (SpScrollableLayout new
+				add: #pageContent;
+				yourself);
+			addLast: #paginator expand: false fill: false padding: 0;
 			yourself);
 		yourself 
 ]
@@ -30,14 +45,22 @@ StPlaybook >> initialize [
 { #category : #initialization }
 StPlaybook >> initializePresenters [
 
-	pageList := self instantiate: SpPlaybookMillerListPresenter.
-	pageList shownPages: 2.
-	pageList presenterBlock: [ :aMove |
+	pageList := self newList
+		items: self playbook allMoves;
+		display: #name;
+		yourself.
+	pageContent := self instantiate: StPlaybookPlayground.
+	
+	pageList transmitTo: pageContent.
+
+	"pageContent := self instantiate: SpPlaybookMillerListPresenter.
+	pageContent shownPages: 2.
+	pageContent presenterBlock: [ :aMove |
 		StPlaybookPlayground on: aMove nextMove ].
-	pageList setRootModel: playbook firstMove.
+	pageContent setRootModel: playbook firstMove.
 	
 	paginator := self instantiate: SpPlaybookMillerPaginatorPresenter.
-	paginator millerList: pageList
+	paginator millerList: pageContent"
 ]
 
 { #category : #initialization }
@@ -45,5 +68,11 @@ StPlaybook >> initializeWindow: aWindowPresenter [
 
 	aWindowPresenter 
 		title: 'Playbook';
-		initialExtent: 600@300
+		initialExtent: 700@400
+]
+
+{ #category : #accessing }
+StPlaybook >> playbook [
+
+	^ playbook
 ]

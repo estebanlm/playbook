@@ -34,18 +34,44 @@ StPlaybookBook class >> newDirectory: aDirectory [
 		yourself
 ]
 
+{ #category : #initialization }
+StPlaybookBook >> addFirstMoveIfNeeded [
+
+	self allFiles ifNotEmpty: [ ^ self ].
+	
+	(self directory / self firstMoveName) ensureCreateFile
+]
+
+{ #category : #private }
+StPlaybookBook >> allFiles [
+
+	^ self directory filesMatching: '*.st'
+]
+
+{ #category : #accessing }
+StPlaybookBook >> allMoves [
+
+	^ self allFiles
+		collect: [ :each | StPlaybookMove fromReference: each ]
+]
+
 { #category : #accessing }
 StPlaybookBook >> directory [
 
 	^ directory
 ]
 
-{ #category : #accessing }
-StPlaybookBook >> firstMove [
+{ #category : #private }
+StPlaybookBook >> firstMoveName [
 
-	^ StPlaybookMove 
-		newDirectory: self directory 
-		number: 1
+	^ '1.st'
+]
+
+{ #category : #initialization }
+StPlaybookBook >> initialize [
+
+	super initialize.
+	self addFirstMoveIfNeeded
 ]
 
 { #category : #initialization }
