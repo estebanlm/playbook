@@ -17,11 +17,14 @@ Class {
 { #category : #specs }
 StPlaybook class >> defaultSpec [
 
-	^ SpPanedLayout newHorizontal
-		position: 25 percent;
+	^ SpBoxLayout newHorizontal
 		add: (SpBoxLayout newVertical
-			add: #pageList;
-			addLast: #actionBar expand: false fill: false padding: 0);
+				add: #pageList;
+				addLast: #actionBar expand: false fill: false padding: 0;
+				yourself)
+			expand: false 
+			fill: false
+			padding: 0;
 		add: #pageContent;
 		yourself
 ]
@@ -51,6 +54,10 @@ StPlaybook >> addNew [
 		selectItem: newMove
 ]
 
+{ #category : #actions }
+StPlaybook >> deleteCurrent [
+]
+
 { #category : #initialization }
 StPlaybook >> initialize [
 	
@@ -64,7 +71,9 @@ StPlaybook >> initializePresenters [
 	pageList := self newList
 		items: self playbook allMoves;
 		display: #name;
+		contextMenu: self pageListMenu;
 		yourself.
+
 	actionBar := self newActionBar
 		add: (self newButton
 			addStyle: 'actionButton.showIcon';
@@ -96,6 +105,16 @@ StPlaybook >> initializeWindow: aWindowPresenter [
 		whenResizingDo: [ :ann | self preferredExtent: ann newSize ]
 ]
 
+{ #category : #initialization }
+StPlaybook >> pageListMenu [
+	
+	^ CmCommandGroup forSpec
+		beDisplayedAsGroup;
+		register: (StPlaybookRenameCommand forSpecContext: self);
+		register: (StPlaybookDeleteCommand forSpecContext: self);
+		asMenuPresenter
+]
+
 { #category : #accessing }
 StPlaybook >> playbook [
 
@@ -113,4 +132,8 @@ StPlaybook >> preferredExtent: aPoint [
 
 	PreferredExtent = aPoint ifTrue: [ ^ self ].
 	PreferredExtent := aPoint
+]
+
+{ #category : #actions }
+StPlaybook >> renameCurrent [
 ]
