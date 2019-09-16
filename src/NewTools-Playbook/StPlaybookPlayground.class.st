@@ -57,6 +57,8 @@ StPlaybookPlayground >> initializeToolbar [
 { #category : #accessing }
 StPlaybookPlayground >> refresh [
 
+	move ifNil: [ ^ self ].
+
 	text text: move contents.
 	statusbar popMessage.
 	statusbar pushMessage: ('Editing {1}' format: { move name })

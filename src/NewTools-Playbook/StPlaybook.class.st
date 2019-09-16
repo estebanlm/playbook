@@ -14,12 +14,6 @@ Class {
 	#category : #'NewTools-Playbook'
 }
 
-{ #category : #accessing }
-StPlaybook class >> defaultExtent [
-
-	^ 600@400
-]
-
 { #category : #specs }
 StPlaybook class >> defaultSpec [
 
@@ -49,8 +43,12 @@ StPlaybook class >> defaultSpecOLD [
 
 { #category : #actions }
 StPlaybook >> addNew [
+	| newMove |
 
-	
+	newMove := self playbook addNew.
+	pageList 
+		items: self playbook allMoves;
+		selectItem: newMove
 ]
 
 { #category : #initialization }
@@ -91,10 +89,11 @@ StPlaybook >> initializePresenters [
 
 { #category : #initialization }
 StPlaybook >> initializeWindow: aWindowPresenter [
-
-	aWindowPresenter 
+	
+	aWindowPresenter
 		title: 'Playbook';
-		initialExtent: self preferredExtent
+		initialExtent: self preferredExtent;
+		whenResizingDo: [ :ann | self preferredExtent: ann newSize ]
 ]
 
 { #category : #accessing }
@@ -106,5 +105,12 @@ StPlaybook >> playbook [
 { #category : #initialization }
 StPlaybook >> preferredExtent [
 
-	^ PreferredExtent ifNil: [ PreferredExtent := self class defaultExtent ]
+	^ PreferredExtent ifNil: [ PreferredExtent := super preferredExtent ]
+]
+
+{ #category : #initialization }
+StPlaybook >> preferredExtent: aPoint [
+
+	PreferredExtent = aPoint ifTrue: [ ^ self ].
+	PreferredExtent := aPoint
 ]

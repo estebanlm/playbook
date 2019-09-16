@@ -42,6 +42,14 @@ StPlaybookBook >> addFirstMoveIfNeeded [
 	(self directory / self firstMoveName) ensureCreateFile
 ]
 
+{ #category : #actions }
+StPlaybookBook >> addNew [
+
+	^ StPlaybookMove 
+		newDirectory: self directory 
+		number: self allMoves last number + 1
+]
+
 { #category : #private }
 StPlaybookBook >> allFiles [
 
@@ -51,8 +59,9 @@ StPlaybookBook >> allFiles [
 { #category : #accessing }
 StPlaybookBook >> allMoves [
 
-	^ self allFiles
-		collect: [ :each | StPlaybookMove fromReference: each ]
+	^ (self allFiles
+		collect: [ :each | StPlaybookMove fromReference: each ])
+		sort: #number ascending
 ]
 
 { #category : #accessing }

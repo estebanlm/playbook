@@ -28,6 +28,13 @@ StPlaybookMove class >> newDirectory: aDirectory number: aNumber [
 		name: ('{1}.st' format: { aNumber }) 
 ]
 
+{ #category : #comparing }
+StPlaybookMove >> = aMove [
+
+	^ self species = aMove species 
+		and: [ self reference = aMove reference ]
+]
+
 { #category : #accessing }
 StPlaybookMove >> contents [
 
@@ -47,7 +54,14 @@ StPlaybookMove >> contents: aString [
 { #category : #initialize }
 StPlaybookMove >> fromReference: aReference [
 
-	reference := aReference
+	reference := aReference.
+	reference ensureCreateFile
+]
+
+{ #category : #comparing }
+StPlaybookMove >> hash [
+		
+	^ self species hash bitXor: self reference hash
 ]
 
 { #category : #accessing }
