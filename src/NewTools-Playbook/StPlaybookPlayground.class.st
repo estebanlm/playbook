@@ -32,6 +32,7 @@ StPlaybookPlayground >> initializePresenters [
 	self initializeToolbar.
 	self initializeStatusbar.
 
+	text whenTextChangedDo: [ :aString | move contents: aString ].
 	move ifNotNil: [ 	
 		text text: move contents ]
 ]

@@ -5,17 +5,29 @@ Class {
 		'pageList',
 		'pageContent',
 		'paginator',
-		'playbook'
+		'playbook',
+		'actionBar'
+	],
+	#classVars : [
+		'PreferredExtent'
 	],
 	#category : #'NewTools-Playbook'
 }
+
+{ #category : #accessing }
+StPlaybook class >> defaultExtent [
+
+	^ 600@400
+]
 
 { #category : #specs }
 StPlaybook class >> defaultSpec [
 
 	^ SpPanedLayout newHorizontal
 		position: 25 percent;
-		add: #pageList;
+		add: (SpBoxLayout newVertical
+			add: #pageList;
+			addLast: #actionBar expand: false fill: false padding: 0);
 		add: #pageContent;
 		yourself
 ]
@@ -35,6 +47,12 @@ StPlaybook class >> defaultSpecOLD [
 		yourself 
 ]
 
+{ #category : #actions }
+StPlaybook >> addNew [
+
+	
+]
+
 { #category : #initialization }
 StPlaybook >> initialize [
 	
@@ -49,9 +67,17 @@ StPlaybook >> initializePresenters [
 		items: self playbook allMoves;
 		display: #name;
 		yourself.
+	actionBar := self newActionBar
+		add: (self newButton
+			addStyle: 'actionButton.showIcon';
+			icon: (self application iconNamed: #add);
+			action: [ self addNew ];
+			yourself);
+		yourself.
 	pageContent := self instantiate: StPlaybookPlayground.
 	
 	pageList transmitTo: pageContent.
+	pageList selectIndex: 1.	
 
 	"pageContent := self instantiate: SpPlaybookMillerListPresenter.
 	pageContent shownPages: 2.
@@ -68,11 +94,17 @@ StPlaybook >> initializeWindow: aWindowPresenter [
 
 	aWindowPresenter 
 		title: 'Playbook';
-		initialExtent: 700@400
+		initialExtent: self preferredExtent
 ]
 
 { #category : #accessing }
 StPlaybook >> playbook [
 
 	^ playbook
+]
+
+{ #category : #initialization }
+StPlaybook >> preferredExtent [
+
+	^ PreferredExtent ifNil: [ PreferredExtent := self class defaultExtent ]
 ]
