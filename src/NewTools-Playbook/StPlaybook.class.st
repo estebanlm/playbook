@@ -18,6 +18,7 @@ Class {
 StPlaybook class >> defaultSpec [
 
 	^ SpBoxLayout newHorizontal
+		spacing: 5;
 		add: (SpBoxLayout newVertical
 				add: #pageList;
 				addLast: #actionBar expand: false fill: false padding: 0;
