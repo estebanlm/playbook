@@ -45,6 +45,31 @@ StPlaybook class >> defaultSpecOLD [
 		yourself 
 ]
 
+{ #category : #icons }
+StPlaybook class >> menuCommandOn: aBuilder [
+	<worldMenu>
+	
+	(aBuilder item: #Playbook)
+		parent: #Tools;
+		action: [ StPlaybook open ];
+		order: 15;
+		help: 'A window used as a scratchpad area where fragments of Pharo code can be entered, stored, edited, and evaluated.';
+		icon: (self iconNamed: #workspaceIcon)
+]
+
+{ #category : #'instance creation' }
+StPlaybook class >> open [ 
+	
+	^ self new openWithSpec
+]
+
+{ #category : #icons }
+StPlaybook class >> taskbarIconName [
+	"Answer the icon for the receiver in a task bar."
+
+	^ #workspaceIcon
+]
+
 { #category : #actions }
 StPlaybook >> addNew [
 	| newMove |
