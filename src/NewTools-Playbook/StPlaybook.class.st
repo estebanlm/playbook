@@ -126,7 +126,7 @@ StPlaybook >> initializePresenters [
 	pageListHeader := self instantiate: StHeaderBar.
 	pageListHeader 
 		label: 'Playgrounds';
-		shortcut: (self shortcutForPanel: 1).
+		shortcut: $1 command mac | $1 control win | $1 control unix.
 	pageList := self newList
 		items: self playbook allMoves;
 		display: #name;
@@ -143,7 +143,7 @@ StPlaybook >> initializePresenters [
 	pageContentHeader := self instantiate: StHeaderBar.
 	pageContentHeader 
 		label: 'Active';
-		shortcut: (self shortcutForPanel: 2).	
+		shortcut: $2 command mac | $2 control win | $2 control unix.	
 	pageContent := self instantiate: StPlaybookPlayground.
 	
 	pageList transmitTo: pageContent.
@@ -168,8 +168,8 @@ StPlaybook >> initializeWindow: aWindowPresenter [
 		whenOpenedDo: [ self subscribeToAnnouncements ];
 		whenClosedDo: [ self unsubscribeFromAnnouncements ];
 		whenResizingDo: [ :ann | self class preferredExtent: ann newSize ];
-		bindKeyCombination: $1 command toAction: [ pageList takeKeyboardFocus ];
-		bindKeyCombination: $2 command toAction: [ pageContent takeKeyboardFocus ]
+		bindKeyCombination: (self shortcutForPanel: 1) toAction: [ pageList takeKeyboardFocus ];
+		bindKeyCombination: (self shortcutForPanel: 2) toAction: [ pageContent takeKeyboardFocus ]
 ]
 
 { #category : #private }
@@ -190,16 +190,6 @@ StPlaybook >> playbook [
 
 { #category : #actions }
 StPlaybook >> renameCurrent [
-]
-
-{ #category : #initialization }
-StPlaybook >> shortcutForPanel: aNumber [
-	| char |
-	
-	char := aNumber asString first.
-	^ char command mac 
-		| char control win 
-		| char control unix
 ]
 
 { #category : #initialization }
