@@ -7,7 +7,7 @@ Class {
 		'expandButton',
 		'expandAction'
 	],
-	#category : #'NewTools-Playbook'
+	#category : #'NewTools-Playbook-View'
 }
 
 { #category : #specs }

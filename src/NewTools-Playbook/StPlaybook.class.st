@@ -11,7 +11,7 @@ Class {
 	#classVars : [
 		'PreferredExtent'
 	],
-	#category : #'NewTools-Playbook'
+	#category : #'NewTools-Playbook-View'
 }
 
 { #category : #specs }
@@ -98,6 +98,18 @@ StPlaybook >> deleteCurrent [
 ]
 
 { #category : #initialization }
+StPlaybook >> flushEnd: ann [
+
+	pageContent popMessage
+]
+
+{ #category : #initialization }
+StPlaybook >> flushStart: ann [
+
+	pageContent pushMessage: 'Saving...'
+]
+
+{ #category : #initialization }
 StPlaybook >> initialize [
 	
 	playbook := StPlaybookBook newDefault.
@@ -141,10 +153,12 @@ StPlaybook >> initializeWindow: aWindowPresenter [
 	aWindowPresenter
 		title: 'Playbook';
 		initialExtent: self class preferredExtent;
+		whenOpenedDo: [ self subscribeToAnnouncements ];
+		whenClosedDo: [ self unsubscribeFromAnnouncements ];
 		whenResizingDo: [ :ann | self class preferredExtent: ann newSize ]
 ]
 
-{ #category : #initialization }
+{ #category : #private }
 StPlaybook >> pageListMenu [
 	
 	^ CmCommandGroup forSpec
@@ -162,4 +176,19 @@ StPlaybook >> playbook [
 
 { #category : #actions }
 StPlaybook >> renameCurrent [
+]
+
+{ #category : #initialization }
+StPlaybook >> subscribeToAnnouncements [
+
+	StPlaybookFlushService uniqueInstance announcer
+		when: StPlaybookFlushStartAnnouncement send: #flushStart: to: self;
+		when: StPlaybookFlushEndAnnouncement send: #flushEnd: to: self
+]
+
+{ #category : #initialization }
+StPlaybook >> unsubscribeFromAnnouncements [
+	
+	StPlaybookFlushService uniqueInstance announcer
+		unsubscribe: self
 ]

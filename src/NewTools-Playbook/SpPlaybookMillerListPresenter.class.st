@@ -7,7 +7,7 @@ Class {
 		'shownPages',
 		'pages'
 	],
-	#category : #'NewTools-Playbook'
+	#category : #'NewTools-Playbook-View'
 }
 
 { #category : #defaults }

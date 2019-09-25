@@ -3,10 +3,9 @@ Class {
 	#superclass : #StPlayground,
 	#instVars : [
 		'move',
-		'toolbar',
-		'statusbar'
+		'toolbar'
 	],
-	#category : #'NewTools-Playbook'
+	#category : #'NewTools-Playbook-View'
 }
 
 { #category : #specs }
@@ -15,7 +14,7 @@ StPlaybookPlayground class >> defaultSpec [
 	^ SpBoxLayout newVertical
 		add: #toolbar expand: false fill: false padding: 0;
 		add: #text;
-		addLast: #statusbar expand: false fill: false padding: 0;
+		addLast: #statusBar expand: false fill: false padding: 0;
 		yourself
 ]
 
@@ -32,7 +31,8 @@ StPlaybookPlayground >> initializePresenters [
 	self initializeToolbar.
 	self initializeStatusbar.
 
-	text whenTextChangedDo: [ :aString | move contents: aString ].
+	text autoAccept: true.
+	text whenTextChangedDo: [ :aString | move contents: aString asString ].
 	move ifNotNil: [ 	
 		text text: move contents ]
 ]
@@ -40,7 +40,7 @@ StPlaybookPlayground >> initializePresenters [
 { #category : #initialization }
 StPlaybookPlayground >> initializeStatusbar [
 	
-	statusbar := self newStatusBar
+	statusBar := self newStatusBar
 ]
 
 { #category : #initialization }
@@ -55,13 +55,25 @@ StPlaybookPlayground >> initializeToolbar [
 ]
 
 { #category : #accessing }
+StPlaybookPlayground >> popMessage [ 
+
+	statusBar popMessage
+]
+
+{ #category : #accessing }
+StPlaybookPlayground >> pushMessage: aString [ 
+
+	statusBar pushMessage: aString
+]
+
+{ #category : #accessing }
 StPlaybookPlayground >> refresh [
 
 	move ifNil: [ ^ self ].
 
 	text text: move contents.
-	statusbar popMessage.
-	statusbar pushMessage: ('Editing {1}' format: { move name })
+	statusBar popMessage.
+	statusBar pushMessage: ('Editing {1}' format: { move name })
 ]
 
 { #category : #'accessing model' }

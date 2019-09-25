@@ -5,7 +5,7 @@ Class {
 		'directory',
 		'playbook'
 	],
-	#category : #'NewTools-Playbook'
+	#category : #'NewTools-Playbook-Model'
 }
 
 { #category : #private }

@@ -2,9 +2,10 @@ Class {
 	#name : #StPlaybookMove,
 	#superclass : #Object,
 	#instVars : [
-		'reference'
+		'reference',
+		'buffer'
 	],
-	#category : #'NewTools-Playbook'
+	#category : #'NewTools-Playbook-Model'
 }
 
 { #category : #'instance creation' }
@@ -38,17 +39,27 @@ StPlaybookMove >> = aMove [
 { #category : #accessing }
 StPlaybookMove >> contents [
 
-	self reference exists ifFalse: [ ^ '' ].
-	^ self reference contents
+	^ buffer ifNil: [ 
+		self reference exists ifFalse: [ ^ '' ].
+		self reference contents ]
 ]
 
 { #category : #accessing }
 StPlaybookMove >> contents: aString [
 
-	self reference 
-		ensureDelete;
-		writeStreamDo: [ :stream | 
-			stream nextPutAll: aString ]
+	buffer := aString.
+	StPlaybookFlushService uniqueInstance queue: self
+]
+
+{ #category : #accessing }
+StPlaybookMove >> flush [
+
+	[ 
+		self reference
+			ensureDelete;
+			writeStreamDo: [ :stream | stream nextPutAll: buffer ] ]
+	ensure: [ 
+		buffer := nil ]
 ]
 
 { #category : #initialize }

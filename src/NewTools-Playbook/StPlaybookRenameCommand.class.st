@@ -1,7 +1,7 @@
 Class {
 	#name : #StPlaybookRenameCommand,
 	#superclass : #StPlaybookCommand,
-	#category : #'NewTools-Playbook'
+	#category : #'NewTools-Playbook-Command'
 }
 
 { #category : #default }

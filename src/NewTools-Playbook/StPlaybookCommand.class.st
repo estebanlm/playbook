@@ -1,5 +1,5 @@
 Class {
 	#name : #StPlaybookCommand,
 	#superclass : #CmCommand,
-	#category : #'NewTools-Playbook'
+	#category : #'NewTools-Playbook-Command'
 }

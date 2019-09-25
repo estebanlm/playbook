@@ -1,7 +1,7 @@
 Class {
 	#name : #StPlaybookDeleteCommand,
 	#superclass : #StPlaybookCommand,
-	#category : #'NewTools-Playbook'
+	#category : #'NewTools-Playbook-Command'
 }
 
 { #category : #default }

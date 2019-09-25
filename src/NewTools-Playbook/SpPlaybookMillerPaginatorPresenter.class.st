@@ -6,7 +6,7 @@ Class {
 		'thumbnailList',
 		'millerList'
 	],
-	#category : #'NewTools-Playbook'
+	#category : #'NewTools-Playbook-View'
 }
 
 { #category : #specs }
