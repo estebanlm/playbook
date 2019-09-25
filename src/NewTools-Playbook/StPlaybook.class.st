@@ -63,6 +63,19 @@ StPlaybook class >> open [
 	^ self new openWithSpec
 ]
 
+{ #category : #initialization }
+StPlaybook class >> preferredExtent [
+
+	^ PreferredExtent ifNil: [ PreferredExtent := 800@450 ]
+]
+
+{ #category : #initialization }
+StPlaybook class >> preferredExtent: aPoint [
+
+	PreferredExtent = aPoint ifTrue: [ ^ self ].
+	PreferredExtent := aPoint
+]
+
 { #category : #icons }
 StPlaybook class >> taskbarIconName [
 	"Answer the icon for the receiver in a task bar."
@@ -127,8 +140,8 @@ StPlaybook >> initializeWindow: aWindowPresenter [
 	
 	aWindowPresenter
 		title: 'Playbook';
-		initialExtent: self preferredExtent;
-		whenResizingDo: [ :ann | self preferredExtent: ann newSize ]
+		initialExtent: self class preferredExtent;
+		whenResizingDo: [ :ann | self class preferredExtent: ann newSize ]
 ]
 
 { #category : #initialization }
@@ -145,19 +158,6 @@ StPlaybook >> pageListMenu [
 StPlaybook >> playbook [
 
 	^ playbook
-]
-
-{ #category : #initialization }
-StPlaybook >> preferredExtent [
-
-	^ PreferredExtent ifNil: [ PreferredExtent := super preferredExtent ]
-]
-
-{ #category : #initialization }
-StPlaybook >> preferredExtent: aPoint [
-
-	PreferredExtent = aPoint ifTrue: [ ^ self ].
-	PreferredExtent := aPoint
 ]
 
 { #category : #actions }
