@@ -2,9 +2,10 @@ Class {
 	#name : #StPlaybook,
 	#superclass : #StPresenter,
 	#instVars : [
+		'pageListHeader',
 		'pageList',
 		'pageContent',
-		'paginator',
+		'pageContentHeader',
 		'playbook',
 		'actionBar'
 	],
@@ -17,16 +18,19 @@ Class {
 { #category : #specs }
 StPlaybook class >> defaultSpec [
 
-	^ SpBoxLayout newHorizontal
-		spacing: 5;
-		add: (SpBoxLayout newVertical
+	^ SpPanedLayout newHorizontal
+		position: 20 percent;
+		add: (SpBoxLayout newVertical 
+			add: #pageListHeader expand: false fill: false padding: 5;
+			add: (SpBoxLayout newVertical
 				add: #pageList;
-				addLast: #actionBar expand: false fill: false padding: 0;
-				yourself)
-			expand: false 
-			fill: false
-			padding: 0;
-		add: #pageContent;
+				addLast: #actionBar expand: false;
+				yourself);
+			yourself);
+		add: (SpBoxLayout newVertical 
+			add: #pageContentHeader expand: false fill: false padding: 5;
+			add: #pageContent;
+			yourself);
 		yourself
 ]
 
@@ -119,12 +123,13 @@ StPlaybook >> initialize [
 { #category : #initialization }
 StPlaybook >> initializePresenters [
 
+	pageListHeader := self instantiate: StHeaderBar.
+	pageListHeader label: 'Moves'.	
 	pageList := self newList
 		items: self playbook allMoves;
 		display: #name;
 		contextMenu: self pageListMenu;
 		yourself.
-
 	actionBar := self newActionBar
 		add: (self newButton
 			addStyle: 'actionButton.showIcon';
@@ -132,6 +137,9 @@ StPlaybook >> initializePresenters [
 			action: [ self addNew ];
 			yourself);
 		yourself.
+
+	pageContentHeader := self instantiate: StHeaderBar.
+	pageContentHeader label: 'Active playground'.	
 	pageContent := self instantiate: StPlaybookPlayground.
 	
 	pageList transmitTo: pageContent.
