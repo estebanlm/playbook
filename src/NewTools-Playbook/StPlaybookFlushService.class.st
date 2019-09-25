@@ -67,7 +67,7 @@ StPlaybookFlushService >> initialize [
 { #category : #accessing }
 StPlaybookFlushService >> name [
 	
-	^ 'StInspector Refresh Service'
+	^ 'StPlaybook Flush Service'
 ]
 
 { #category : #accessing }
