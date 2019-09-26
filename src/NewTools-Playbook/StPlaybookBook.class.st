@@ -87,5 +87,12 @@ StPlaybookBook >> initialize [
 StPlaybookBook >> initializeDirectory: aDirectory [ 
 
 	directory := aDirectory.
+	directory ensureCreateDirectory.
 	self initialize
+]
+
+{ #category : #accessing }
+StPlaybookBook >> title [
+
+	^ self directory basename
 ]

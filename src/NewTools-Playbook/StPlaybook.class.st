@@ -64,7 +64,19 @@ StPlaybook class >> menuCommandOn: aBuilder [
 { #category : #'instance creation' }
 StPlaybook class >> open [ 
 	
-	^ self new openWithSpec
+	^ self openOn: StPlaybookBook newDefault
+]
+
+{ #category : #'instance creation' }
+StPlaybook class >> openOn: aPlaybook [
+	
+	^ (self on: aPlaybook) openWithSpec
+]
+
+{ #category : #'instance creation' }
+StPlaybook class >> openOnDirectory: aDirectory [
+
+	^ self openOn: (StPlaybookBook newDirectory: aDirectory)
 ]
 
 { #category : #initialization }
@@ -114,13 +126,6 @@ StPlaybook >> flushStart: ann [
 ]
 
 { #category : #initialization }
-StPlaybook >> initialize [
-	
-	playbook := StPlaybookBook newDefault.
-	super initialize
-]
-
-{ #category : #initialization }
 StPlaybook >> initializePresenters [
 
 	pageListHeader := self instantiate: StHeaderBar.
@@ -163,7 +168,7 @@ StPlaybook >> initializePresenters [
 StPlaybook >> initializeWindow: aWindowPresenter [
 	
 	aWindowPresenter
-		title: 'Playbook';
+		title: 'Playbook: ', self playbook title;
 		initialExtent: self class preferredExtent;
 		whenOpenedDo: [ self subscribeToAnnouncements ];
 		whenClosedDo: [ self unsubscribeFromAnnouncements ];
@@ -190,6 +195,12 @@ StPlaybook >> playbook [
 
 { #category : #actions }
 StPlaybook >> renameCurrent [
+]
+
+{ #category : #initialization }
+StPlaybook >> setModelBeforeInitialization: aPlaybook [
+
+	playbook := aPlaybook
 ]
 
 { #category : #initialization }
