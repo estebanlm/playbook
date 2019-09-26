@@ -18,10 +18,19 @@ StPlaybookFlushService class >> new [
 	self error: 'Use #uniqueInstance'
 ]
 
+{ #category : #starting }
+StPlaybookFlushService class >> restart [
+	<script>
+	
+	self uniqueInstance
+		stop;
+		start
+]
+
 { #category : #accessing }
 StPlaybookFlushService class >> stepDelay [
 
-	^ 30 seconds
+	^ 10 seconds
 ]
 
 { #category : #'instance creation' }
