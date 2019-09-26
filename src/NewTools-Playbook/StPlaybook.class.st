@@ -173,8 +173,10 @@ StPlaybook >> initializeWindow: aWindowPresenter [
 		whenOpenedDo: [ self subscribeToAnnouncements ];
 		whenClosedDo: [ self unsubscribeFromAnnouncements ];
 		whenResizingDo: [ :ann | self class preferredExtent: ann newSize ];
-		bindKeyCombination: (self shortcutForPanel: 1) toAction: [ pageList takeKeyboardFocus ];
-		bindKeyCombination: (self shortcutForPanel: 2) toAction: [ pageContent takeKeyboardFocus ]
+		bindKeyCombination: (self shortcutForPanel: 1) 
+			toAction: [ pageList takeKeyboardFocus ];
+		bindKeyCombination: (self shortcutForPanel: 2) 
+			toAction: [ pageContent firstResponder takeKeyboardFocus ]
 ]
 
 { #category : #private }

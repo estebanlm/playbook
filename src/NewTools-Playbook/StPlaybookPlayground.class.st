@@ -24,13 +24,20 @@ StPlaybookPlayground >> defineInputPorts [
 	^ { SpModelPort new }
 ]
 
+{ #category : #accessing }
+StPlaybookPlayground >> firstResponder [
+
+	^ text
+]
+
 { #category : #initialization }
 StPlaybookPlayground >> initializePresenters [
 
 	super initializePresenters.
 	self initializeToolbar.
 	self initializeStatusbar.
-
+	
+	"this is just needed for morphic, gtk is always autoAccept"
 	text autoAccept: true.
 	text whenTextChangedDo: [ :aString | move contents: aString asString ].
 	move ifNotNil: [ 	
