@@ -152,16 +152,7 @@ StPlaybook >> initializePresenters [
 	pageContent := self instantiate: StPlaybookPlayground.
 	
 	pageList transmitTo: pageContent.
-	pageList selectIndex: 1.	
-
-	"pageContent := self instantiate: SpPlaybookMillerListPresenter.
-	pageContent shownPages: 2.
-	pageContent presenterBlock: [ :aMove |
-		StPlaybookPlayground on: aMove nextMove ].
-	pageContent setRootModel: playbook firstMove.
-	
-	paginator := self instantiate: SpPlaybookMillerPaginatorPresenter.
-	paginator millerList: pageContent"
+	pageList selectIndex: 1
 ]
 
 { #category : #initialization }
