@@ -75,7 +75,7 @@ StPlaybook2 >> initializePresenters [
 		shortcut: $2 command mac | $2 control win | $2 control unix.	
 	pageContent := self instantiate: StPlaybookPlayground.
 	
-	pageList transmitTo: pageContent.
+	pageList transmitTo: pageContent transform: [ :page | page move ].
 	pageList selectIndex: 1
 ]
 
