@@ -47,6 +47,7 @@ StPlaybookMove >> contents [
 { #category : #accessing }
 StPlaybookMove >> contents: aString [
 
+	aString = self contents ifTrue: [ ^ self ].
 	buffer := aString.
 	StPlaybookFlushService uniqueInstance queue: self
 ]
