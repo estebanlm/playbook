@@ -34,21 +34,6 @@ StPlaybook class >> defaultSpec [
 		yourself
 ]
 
-{ #category : #specs }
-StPlaybook class >> defaultSpecOLD [
-
-	^ SpPanedLayout newHorizontal
-		position: 30 percent;
-		add: #pageList;
-		add: (SpBoxLayout newHorizontal
-			add: (SpScrollableLayout new
-				add: #pageContent;
-				yourself);
-			addLast: #paginator expand: false fill: false padding: 0;
-			yourself);
-		yourself 
-]
-
 { #category : #icons }
 StPlaybook class >> menuCommandOn: aBuilder [
 	<worldMenu>
@@ -131,7 +116,7 @@ StPlaybook >> initializePresenters [
 	pageListHeader := self instantiate: StHeaderBar.
 	pageListHeader 
 		label: 'Playgrounds';
-		shortcut: $1 command mac | $1 control win | $1 control unix.
+		shortcut: (self shortcutForPanel: 1).
 	pageList := self newList
 		items: self playbook allMoves;
 		display: #name;
@@ -148,7 +133,7 @@ StPlaybook >> initializePresenters [
 	pageContentHeader := self instantiate: StHeaderBar.
 	pageContentHeader 
 		label: 'Active';
-		shortcut: $2 command mac | $2 control win | $2 control unix.	
+		shortcut: (self shortcutForPanel: 2).	
 	pageContent := self instantiate: StPlaybookPlayground.
 	
 	pageList transmitTo: pageContent.

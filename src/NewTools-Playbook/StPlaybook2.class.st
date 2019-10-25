@@ -9,10 +9,13 @@ Class {
 		'pageContentHeader',
 		'pageContent'
 	],
+	#classVars : [
+		'PreferredExtent'
+	],
 	#category : #'NewTools-Playbook-View'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 StPlaybook2 class >> defaultPlaybook [
 
 	^ StPlaybookBook newDefault
@@ -37,6 +40,19 @@ StPlaybook2 class >> defaultSpec [
 		yourself
 ]
 
+{ #category : #settings }
+StPlaybook2 class >> preferredExtent [
+
+	^ PreferredExtent ifNil: [ PreferredExtent := 800@450 ]
+]
+
+{ #category : #settings }
+StPlaybook2 class >> preferredExtent: aPoint [
+
+	PreferredExtent = aPoint ifTrue: [ ^ self ].
+	PreferredExtent := aPoint
+]
+
 { #category : #private }
 StPlaybook2 >> allMovePresenters [
 
@@ -51,13 +67,25 @@ StPlaybook2 >> allMoves [
 		ifNil: [ #() ]
 ]
 
+{ #category : #private }
+StPlaybook2 >> flushEnd: ann [
+
+	pageContent popMessage
+]
+
+{ #category : #private }
+StPlaybook2 >> flushStart: ann [
+
+	pageContent pushMessage: 'Saving...'
+]
+
 { #category : #initialization }
 StPlaybook2 >> initializePresenters [
 
 	pageListHeader := self instantiate: StHeaderBar.
 	pageListHeader 
 		label: 'Playgrounds';
-		shortcut: $1 command mac | $1 control win | $1 control unix.
+		shortcut: (self shortcutForPanel: 1).
 	pageList := self newComponentList
 		presenters: self allMovePresenters;
 		yourself.
@@ -72,15 +100,45 @@ StPlaybook2 >> initializePresenters [
 	pageContentHeader := self instantiate: StHeaderBar.
 	pageContentHeader 
 		label: 'Active';
-		shortcut: $2 command mac | $2 control win | $2 control unix.	
+		shortcut: (self shortcutForPanel: 2).	
 	pageContent := self instantiate: StPlaybookPlayground.
 	
 	pageList transmitTo: pageContent transform: [ :page | page move ].
 	pageList selectIndex: 1
 ]
 
+{ #category : #initialization }
+StPlaybook2 >> initializeWindow: aWindowPresenter [
+	
+	aWindowPresenter
+		title: 'Playbook: ', self playbook title;
+		initialExtent: self class preferredExtent;
+		whenOpenedDo: [ self subscribeToAnnouncements ];
+		whenClosedDo: [ self unsubscribeFromAnnouncements ];
+		whenResizingDo: [ :ann | self class preferredExtent: ann newSize ];
+		bindKeyCombination: (self shortcutForPanel: 1) 
+			toAction: [ pageList takeKeyboardFocus ];
+		bindKeyCombination: (self shortcutForPanel: 2) 
+			toAction: [ pageContent firstResponder takeKeyboardFocus ]
+]
+
 { #category : #accessing }
 StPlaybook2 >> playbook [
 
 	^ playbook ifNil: [ playbook := self class defaultPlaybook ]
+]
+
+{ #category : #initialization }
+StPlaybook2 >> subscribeToAnnouncements [
+
+	StPlaybookFlushService uniqueInstance announcer
+		when: StPlaybookFlushStartAnnouncement send: #flushStart: to: self;
+		when: StPlaybookFlushEndAnnouncement send: #flushEnd: to: self
+]
+
+{ #category : #initialization }
+StPlaybook2 >> unsubscribeFromAnnouncements [
+	
+	StPlaybookFlushService uniqueInstance announcer
+		unsubscribe: self
 ]

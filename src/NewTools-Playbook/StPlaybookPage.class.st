@@ -22,7 +22,10 @@ StPlaybookPage class >> defaultSpec [
 StPlaybookPage >> initializePresenters [
 
 	titleLabel := self newLabel label: self move name.
-	dateLabel := self newLabel label: self move modificationTimeAsHumanReadable
+	dateLabel := self newLabel 
+		label: self move modificationTimeAsHumanReadable;
+		addStyle: 'dim';
+		yourself
 ]
 
 { #category : #accessing }
