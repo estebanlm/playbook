@@ -77,9 +77,15 @@ StPlaybookMove >> hash [
 ]
 
 { #category : #accessing }
+StPlaybookMove >> modificationTime [
+
+	^ DateAndTime now - self reference modificationTime
+]
+
+{ #category : #accessing }
 StPlaybookMove >> modificationTimeAsHumanReadable [
 
-	^ (DateAndTime now - self reference modificationTime) humanReadablePrintString
+	^ self modificationTime simpleTimeAgo
 ]
 
 { #category : #accessing }
