@@ -2,18 +2,25 @@ Class {
 	#name : #StPlaybook,
 	#superclass : #StPresenter,
 	#instVars : [
+		'playbook',
 		'pageListHeader',
 		'pageList',
-		'pageContent',
+		'actionBar',
 		'pageContentHeader',
-		'playbook',
-		'actionBar'
+		'pageContent',
+		'sortFunction'
 	],
 	#classVars : [
 		'PreferredExtent'
 	],
 	#category : #'NewTools-Playbook-View'
 }
+
+{ #category : #accessing }
+StPlaybook class >> defaultPlaybook [
+
+	^ StPlaybookBook newDefault
+]
 
 { #category : #specs }
 StPlaybook class >> defaultSpec [
@@ -40,7 +47,7 @@ StPlaybook class >> menuCommandOn: aBuilder [
 	
 	(aBuilder item: #Playbook)
 		parent: #Tools;
-		action: [ StPlaybook open ];
+		action: [ StPlaybookOLD open ];
 		order: 15;
 		help: 'A window used as a scratchpad area where fragments of Pharo code can be entered, stored, edited, and evaluated.';
 		icon: (self iconNamed: #workspaceIcon)
@@ -48,6 +55,7 @@ StPlaybook class >> menuCommandOn: aBuilder [
 
 { #category : #'instance creation' }
 StPlaybook class >> open [ 
+	<script>
 	
 	^ self openOn: StPlaybookBook newDefault
 ]
@@ -64,50 +72,53 @@ StPlaybook class >> openOnDirectory: aDirectory [
 	^ self openOn: (StPlaybookBook newDirectory: aDirectory)
 ]
 
-{ #category : #initialization }
+{ #category : #settings }
 StPlaybook class >> preferredExtent [
 
 	^ PreferredExtent ifNil: [ PreferredExtent := 800@450 ]
 ]
 
-{ #category : #initialization }
+{ #category : #settings }
 StPlaybook class >> preferredExtent: aPoint [
 
 	PreferredExtent = aPoint ifTrue: [ ^ self ].
 	PreferredExtent := aPoint
 ]
 
-{ #category : #icons }
-StPlaybook class >> taskbarIconName [
-	"Answer the icon for the receiver in a task bar."
+{ #category : #private }
+StPlaybook >> allMovePresenters [
 
-	^ #workspaceIcon
+	^ (self allMoves 
+		sorted: self sortFunction) 
+		collect: [ :each | self instantiate: StPlaybookPage on: each ]
 ]
 
-{ #category : #actions }
-StPlaybook >> addNew [
-	| newMove |
+{ #category : #accessing }
+StPlaybook >> allMoves [
 
-	newMove := self playbook addNew.
-	pageList 
-		items: self playbook allMoves;
-		selectItem: newMove
+	^ self playbook 
+		ifNotNil: [ :book | book allMoves ]
+		ifNil: [ #() ]
 ]
 
-{ #category : #actions }
-StPlaybook >> deleteCurrent [
-]
-
-{ #category : #initialization }
+{ #category : #private }
 StPlaybook >> flushEnd: ann [
 
-	pageContent popMessage
+	pageContent popMessage.
+	self refreshPageListOrder
 ]
 
-{ #category : #initialization }
+{ #category : #private }
 StPlaybook >> flushStart: ann [
 
 	pageContent pushMessage: 'Saving...'
+]
+
+{ #category : #initialization }
+StPlaybook >> initialize [
+
+	sortFunction := #modificationTime ascending.
+	super initialize
 ]
 
 { #category : #initialization }
@@ -117,10 +128,8 @@ StPlaybook >> initializePresenters [
 	pageListHeader 
 		label: 'Playgrounds';
 		shortcut: (self shortcutForPanel: 1).
-	pageList := self newList
-		items: self playbook allMoves;
-		display: #name;
-		contextMenu: self pageListMenu;
+	pageList := self newComponentList
+		presenters: self allMovePresenters;
 		yourself.
 	actionBar := self newActionBar
 		add: (self newButton
@@ -136,7 +145,7 @@ StPlaybook >> initializePresenters [
 		shortcut: (self shortcutForPanel: 2).	
 	pageContent := self instantiate: StPlaybookPlayground.
 	
-	pageList transmitTo: pageContent.
+	pageList transmitTo: pageContent transform: [ :page | page move ].
 	pageList selectIndex: 1
 ]
 
@@ -155,30 +164,32 @@ StPlaybook >> initializeWindow: aWindowPresenter [
 			toAction: [ pageContent firstResponder takeKeyboardFocus ]
 ]
 
-{ #category : #private }
-StPlaybook >> pageListMenu [
-	
-	^ CmCommandGroup forSpec
-		beDisplayedAsGroup;
-		register: (StPlaybookRenameCommand forSpecContext: self);
-		register: (StPlaybookDeleteCommand forSpecContext: self);
-		asMenuPresenter
-]
-
 { #category : #accessing }
 StPlaybook >> playbook [
 
-	^ playbook
+	^ playbook ifNil: [ playbook := self class defaultPlaybook ]
 ]
 
-{ #category : #actions }
-StPlaybook >> renameCurrent [
+{ #category : #private }
+StPlaybook >> refreshPageListOrder [
+	| selectedMove |
+
+	selectedMove := pageList selection selectedItem ifNotNil: #move.
+	pageList presenters: self allMovePresenters.
+	selectedMove ifNotNil: [ 
+		pageList selectItem: (pageList presenters detect: [ :each | each move = selectedMove ]) ]
 ]
 
 { #category : #initialization }
-StPlaybook >> setModelBeforeInitialization: aPlaybook [
+StPlaybook >> setModelBeforeInitialization: aBook [
 
-	playbook := aPlaybook
+	playbook := aBook
+]
+
+{ #category : #private }
+StPlaybook >> sortFunction [
+
+	^ sortFunction
 ]
 
 { #category : #initialization }

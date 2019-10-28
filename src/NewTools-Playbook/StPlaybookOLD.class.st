@@ -1,13 +1,13 @@
 Class {
-	#name : #StPlaybook2,
+	#name : #StPlaybookOLD,
 	#superclass : #StPresenter,
 	#instVars : [
-		'playbook',
 		'pageListHeader',
 		'pageList',
-		'actionBar',
+		'pageContent',
 		'pageContentHeader',
-		'pageContent'
+		'playbook',
+		'actionBar'
 	],
 	#classVars : [
 		'PreferredExtent'
@@ -15,14 +15,8 @@ Class {
 	#category : #'NewTools-Playbook-View'
 }
 
-{ #category : #accessing }
-StPlaybook2 class >> defaultPlaybook [
-
-	^ StPlaybookBook newDefault
-]
-
 { #category : #specs }
-StPlaybook2 class >> defaultSpec [
+StPlaybookOLD class >> defaultSpec [
 
 	^ SpPanedLayout newHorizontal
 		position: 20 percent;
@@ -40,54 +34,81 @@ StPlaybook2 class >> defaultSpec [
 		yourself
 ]
 
-{ #category : #settings }
-StPlaybook2 class >> preferredExtent [
+{ #category : #'instance creation' }
+StPlaybookOLD class >> open [ 
+	
+	^ self openOn: StPlaybookBook newDefault
+]
+
+{ #category : #'instance creation' }
+StPlaybookOLD class >> openOn: aPlaybook [
+	
+	^ (self on: aPlaybook) openWithSpec
+]
+
+{ #category : #'instance creation' }
+StPlaybookOLD class >> openOnDirectory: aDirectory [
+
+	^ self openOn: (StPlaybookBook newDirectory: aDirectory)
+]
+
+{ #category : #initialization }
+StPlaybookOLD class >> preferredExtent [
 
 	^ PreferredExtent ifNil: [ PreferredExtent := 800@450 ]
 ]
 
-{ #category : #settings }
-StPlaybook2 class >> preferredExtent: aPoint [
+{ #category : #initialization }
+StPlaybookOLD class >> preferredExtent: aPoint [
 
 	PreferredExtent = aPoint ifTrue: [ ^ self ].
 	PreferredExtent := aPoint
 ]
 
-{ #category : #private }
-StPlaybook2 >> allMovePresenters [
+{ #category : #icons }
+StPlaybookOLD class >> taskbarIconName [
+	"Answer the icon for the receiver in a task bar."
 
-	^ self allMoves collect: [ :each | self instantiate: StPlaybookPage on: each ]
+	^ #workspaceIcon
 ]
 
-{ #category : #accessing }
-StPlaybook2 >> allMoves [
+{ #category : #actions }
+StPlaybookOLD >> addNew [
+	| newMove |
 
-	^ self playbook 
-		ifNotNil: [ :book | book allMoves ]
-		ifNil: [ #() ]
+	newMove := self playbook addNew.
+	pageList 
+		items: self playbook allMoves;
+		selectItem: newMove
 ]
 
-{ #category : #private }
-StPlaybook2 >> flushEnd: ann [
+{ #category : #actions }
+StPlaybookOLD >> deleteCurrent [
+]
+
+{ #category : #initialization }
+StPlaybookOLD >> flushEnd: ann [
 
 	pageContent popMessage
 ]
 
-{ #category : #private }
-StPlaybook2 >> flushStart: ann [
+{ #category : #initialization }
+StPlaybookOLD >> flushStart: ann [
 
 	pageContent pushMessage: 'Saving...'
 ]
 
 { #category : #initialization }
-StPlaybook2 >> initializePresenters [
+StPlaybookOLD >> initializePresenters [
 
 	pageListHeader := self instantiate: StHeaderBar.
 	pageListHeader 
 		label: 'Playgrounds';
 		shortcut: (self shortcutForPanel: 1).
-	pageList := self newComponentList
-		presenters: self allMovePresenters;
+	pageList := self newList
+		items: self playbook allMoves;
+		display: #name;
+		contextMenu: self pageListMenu;
 		yourself.
 	actionBar := self newActionBar
 		add: (self newButton
@@ -103,12 +124,12 @@ StPlaybook2 >> initializePresenters [
 		shortcut: (self shortcutForPanel: 2).	
 	pageContent := self instantiate: StPlaybookPlayground.
 	
-	pageList transmitTo: pageContent transform: [ :page | page move ].
+	pageList transmitTo: pageContent.
 	pageList selectIndex: 1
 ]
 
 { #category : #initialization }
-StPlaybook2 >> initializeWindow: aWindowPresenter [
+StPlaybookOLD >> initializeWindow: aWindowPresenter [
 	
 	aWindowPresenter
 		title: 'Playbook: ', self playbook title;
@@ -122,14 +143,34 @@ StPlaybook2 >> initializeWindow: aWindowPresenter [
 			toAction: [ pageContent firstResponder takeKeyboardFocus ]
 ]
 
-{ #category : #accessing }
-StPlaybook2 >> playbook [
+{ #category : #private }
+StPlaybookOLD >> pageListMenu [
+	
+	^ CmCommandGroup forSpec
+		beDisplayedAsGroup;
+		register: (StPlaybookRenameCommand forSpecContext: self);
+		register: (StPlaybookDeleteCommand forSpecContext: self);
+		asMenuPresenter
+]
 
-	^ playbook ifNil: [ playbook := self class defaultPlaybook ]
+{ #category : #accessing }
+StPlaybookOLD >> playbook [
+
+	^ playbook
+]
+
+{ #category : #actions }
+StPlaybookOLD >> renameCurrent [
 ]
 
 { #category : #initialization }
-StPlaybook2 >> subscribeToAnnouncements [
+StPlaybookOLD >> setModelBeforeInitialization: aPlaybook [
+
+	playbook := aPlaybook
+]
+
+{ #category : #initialization }
+StPlaybookOLD >> subscribeToAnnouncements [
 
 	StPlaybookFlushService uniqueInstance announcer
 		when: StPlaybookFlushStartAnnouncement send: #flushStart: to: self;
@@ -137,7 +178,7 @@ StPlaybook2 >> subscribeToAnnouncements [
 ]
 
 { #category : #initialization }
-StPlaybook2 >> unsubscribeFromAnnouncements [
+StPlaybookOLD >> unsubscribeFromAnnouncements [
 	
 	StPlaybookFlushService uniqueInstance announcer
 		unsubscribe: self
